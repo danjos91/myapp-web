@@ -1,4 +1,5 @@
 ru\yandex\practicum\controller\UserController.class
 ru\yandex\practicum\WebConfiguration.class
 ru\yandex\practicum\controller\HomeController.class
+ru\yandex\practicum\model\User.class
 ru\yandex\practicum\configuration\ThymeleafConfiguration.class

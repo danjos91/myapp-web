@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru"><head>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -56,6 +57,9 @@
 <body>
 <h1>Пользователи</h1>
 <button class="btn-add" onclick="toggleForm()">Добавить пользователя</button>
+
+<!-- ... -->
+
 <table>
     <thead>
     <tr>
@@ -67,7 +71,33 @@
         <th>Действия</th>
     </tr>
     </thead>
-    <!-- Тестовые данные для отображения-->
+    <tbody>
+
+    <!-- Цикл по пользователям из атрибута users-->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"/> <!-- Вставляем идентификаторы и остальные атрибуты-->
+        <td th:text="${user.firstName}"/>
+        <td th:text="${user.lastName}"/>
+        <td th:text="${user.age}"/>
+        <td th:text="${user.active ? 'Да' : 'Нет'}"/>
+        <td class="actions">
+            <button>Удалить</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возраст</th>
+        <th>Активен</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+     Тестовые данные для отображения
     <tbody>
     <tr>
         <td>1</td>
@@ -100,7 +130,7 @@
         </td>
     </tr>
     </tbody>
-</table>
+</table> -->
 
 <!-- Скрываемая форма для добавления нового пользователя -->
 <div class="form-container" style="display: none;" id="userForm">
