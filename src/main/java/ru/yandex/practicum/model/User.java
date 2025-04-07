@@ -1,8 +1,6 @@
 package ru.yandex.practicum.model;
 
-import lombok.Data;
 
-@Data
 public class User {
 
     private Long id;
@@ -21,6 +19,26 @@ public class User {
         this.lastName = lastName;
         this.age = age;
         this.active = active;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     // Геттеры и сеттеры ...
