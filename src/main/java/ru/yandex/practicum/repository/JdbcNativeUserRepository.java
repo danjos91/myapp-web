@@ -30,4 +30,11 @@ public class JdbcNativeUserRepository implements UserRepository {
                 ));
     }
 
+    @Override
+    public void save(User user) {
+        // Формируем insert-запрос с параметрами
+        jdbcTemplate.update("insert into users(first_name, last_name, age, active) values(?, ?, ?, ?)",
+                user.getFirstName(), user.getLastName(), user.getAge(), user.isActive());
+    }
+
 }
