@@ -2,10 +2,7 @@ package ru.yandex.practicum.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.UserService;
 
@@ -34,6 +31,13 @@ public class UserController {
         service.save(user);
 
         return "redirect:/users"; // Возвращаем страницу, чтобы она перезагрузилась
+    }
+
+    @PostMapping(value = "/{id}", params = "_method=delete")
+    public String delete(@PathVariable(name = "id") Long id) {
+        service.deleteById(id);
+
+        return "redirect:/users";
     }
 
 }

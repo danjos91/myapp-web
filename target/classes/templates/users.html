@@ -72,16 +72,17 @@
     </tr>
     </thead>
     <tbody>
-
-    <!-- Цикл по пользователям из атрибута users-->
     <tr th:each="user : ${users}">
-        <td th:text="${user.id}"/> <!-- Вставляем идентификаторы и остальные атрибуты-->
+        <td th:text="${user.id}"/>
         <td th:text="${user.firstName}"/>
         <td th:text="${user.lastName}"/>
         <td th:text="${user.age}"/>
         <td th:text="${user.active ? 'Да' : 'Нет'}"/>
-        <td class="actions">
-            <button>Удалить</button>
+        <td>
+            <form th:action="@{/users/{id}(id=${user.id})}" method="post" style="display:inline;">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit">Удалить</button>
+            </form>
         </td>
     </tr>
     </tbody>

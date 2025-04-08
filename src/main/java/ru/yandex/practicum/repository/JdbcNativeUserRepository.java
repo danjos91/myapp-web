@@ -37,4 +37,9 @@ public class JdbcNativeUserRepository implements UserRepository {
                 user.getFirstName(), user.getLastName(), user.getAge(), user.isActive());
     }
 
+    @Override
+    public void deleteById(Long id) {
+        jdbcTemplate.update("delete from users where id = ?", id);
+    }
+
 }
