@@ -10,15 +10,24 @@ public class PostModel {
     private String title;
     private String text;
     private String shortDescription;
-    private String imagePath; // Ruta relativa o absoluta al archivo TODO add logic to work with images
+    private String imagePath; // relative path TODO add logic to work with images
     private long likes;
     private List<String> comments;
     private List<String> tags;
 
-    public PostModel(long id, String firstName, String lastName, int age, boolean active) {
-    }
 
-    public PostModel ();
+    public PostModel () {};
+
+    public PostModel(Long id, String title, String text, String shortDescription, String imagePath, long likes, List<String> comments, List<String> tags) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.shortDescription = shortDescription;
+        this.imagePath = imagePath;
+        this.likes = likes;
+        this.comments = comments;
+        this.tags = tags;
+    }
 
 
     public Long getId() {
