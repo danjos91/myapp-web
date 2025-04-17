@@ -1,17 +1,21 @@
 package ru.yandex.practicum.model;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.ToString;
-
 import java.util.List;
+import javax.persistence.*;
 
 @Data
+@Entity
+@Table(name = "posts")
 public class PostModel {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private String title;
+    @Column
     private String text;
     private String shortDescription;
     private String imagePath; // relative path TODO add logic to work with images
@@ -28,4 +32,8 @@ public class PostModel {
         this.likes = likes;
     }
 
+    public PostModel() {
+
+    }
 }
+

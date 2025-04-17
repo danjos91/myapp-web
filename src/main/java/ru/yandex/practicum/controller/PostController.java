@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.service.PostService;
+import ru.yandex.practicum.util.Paging;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,14 +20,38 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping
+    public String posts(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(required = false, defaultValue = "10") int pageSize,
+            Model model) {
 
-    @GetMapping // GET запрос /posts
-    public String posts(Model model) {
-        List<PostModel> posts = postService.findAll();
-        model.addAttribute("posts", posts);
+        // Obtener posts paginados y filtrados
+        Page<PostModel> postPage =  postService.findPaginated(search, pageNumber, pageSize);
 
-        return "posts"; // Возвращаем название шаблона — posts.html
+        // Configurar el objeto de paginación
+        Paging paging = new Paging(
+                postPage.getNumber() + 1, // pageNumber
+                postPage.getSize(),      // pageSize
+                postPage.getTotalPages(),
+                postPage.hasNext(),
+                postPage.hasPrevious()
+        );
+
+        // Agregar atributos al modelo
+        model.addAttribute("posts", postPage.getContent());
+        model.addAttribute("paging", paging);
+        model.addAttribute("search", search);
+
+        return "posts";
     }
+
+    @GetMapping("/add")
+    public String showAddForm() {
+        return "redirect:/add-post";
+    }
+
 
     @PostMapping
     public String save(@ModelAttribute PostModel postModel) {

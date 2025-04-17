@@ -1,6 +1,8 @@
 package ru.yandex.practicum.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -65,6 +67,16 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public void deleteById(Long id) {
         jdbcTemplate.update("delete from posts where id = ?", id);
+    }
+
+    @Override
+    public Page<PostModel> findAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<PostModel> findByTagsContaining(String tag, Pageable pageable) {
+        return null;
     }
 
 }
