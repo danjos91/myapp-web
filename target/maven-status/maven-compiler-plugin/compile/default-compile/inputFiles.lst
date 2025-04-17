@@ -1,9 +1,16 @@
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\configuration\DataSourceConfiguration.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\configuration\ThymeleafConfiguration.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\controller\HomeController.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\controller\PostController.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\controller\UserController.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\model\Comment.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\model\PostModel.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\model\Tag.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\model\User.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\repository\JdbcNativePostRepository.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\repository\JdbcNativeUserRepository.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\repository\PostRepository.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\repository\UserRepository.java
+C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\service\PostService.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\service\UserService.java
 C:\Users\Женя\Documents\WorkDanny\TASK_1\myapp-web\src\main\java\ru\yandex\practicum\WebConfiguration.java

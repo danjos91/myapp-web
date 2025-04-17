@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.service.PostService;
@@ -19,9 +20,9 @@ public class PostController {
 
 
     @GetMapping // GET запрос /posts
-    public String posts(PostModel postModel) {
+    public String posts(Model model) {
         List<PostModel> posts = postService.findAll();
-        postModel.addAttribute("posts", posts);
+        model.addAttribute("posts", posts);
 
         return "posts"; // Возвращаем название шаблона — posts.html
     }
