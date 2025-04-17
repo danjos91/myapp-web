@@ -12,7 +12,7 @@ import ru.yandex.practicum.service.PostService;
 import java.io.IOException;
 import java.util.Map;
 
-@Controller
+@Controller("/posts")
 public class PostController {
 
     private final PostService postService;
@@ -21,12 +21,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/posts";
-    }
-
-    @GetMapping("/posts")
+    @GetMapping
     public String getPosts(
             @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -47,20 +42,20 @@ public class PostController {
         return "posts";
     }
 
-    @GetMapping("/posts/{id}")
+    @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
         PostModel post = postService.getPostById(id);
         model.addAttribute("post", post);
         return "post";
     }
 
-    @GetMapping("/posts/add")
+    @GetMapping("/add")
     public String showAddPostForm(Model model) {
         model.addAttribute("post", new PostModel());
         return "add-post";
     }
 
-    @PostMapping("/posts")
+    @PostMapping
     public String addPost(
             @RequestParam String title,
             @RequestParam String text,
@@ -79,7 +74,7 @@ public class PostController {
         return postService.getPostImage(id);
     }
 
-    @PostMapping("/posts/{id}/like")
+    @PostMapping("/{id}/like")
     public String likePost(
             @PathVariable Long id,
             @RequestParam boolean like,
@@ -90,14 +85,14 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
-    @GetMapping("/posts/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String showEditPostForm(@PathVariable Long id, Model model) {
         PostModel post = postService.getPostById(id);
         model.addAttribute("post", post);
         return "add-post";
     }
 
-    @PostMapping("/posts/{id}")
+    @PostMapping("/{id}")
     public String updatePost(
             @PathVariable Long id,
             @RequestParam String title,
@@ -111,7 +106,7 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
-    @PostMapping("/posts/{id}/comments")
+    @PostMapping("/{id}/comments")
     public String addComment(
             @PathVariable Long id,
             @RequestParam String text,
@@ -122,7 +117,7 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
-    @PostMapping("/posts/{id}/comments/{commentId}")
+    @PostMapping("/{id}/comments/{commentId}")
     public String editComment(
             @PathVariable Long id,
             @PathVariable Long commentId,
@@ -134,7 +129,7 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
-    @PostMapping("/posts/{id}/comments/{commentId}/delete")
+    @PostMapping("/{id}/comments/{commentId}/delete")
     public String deleteComment(
             @PathVariable Long id,
             @PathVariable Long commentId,
@@ -145,7 +140,7 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
-    @PostMapping("/posts/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String deletePost(
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
