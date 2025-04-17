@@ -10,7 +10,6 @@ import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.service.PostService;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -107,9 +106,9 @@ public class PostController {
             @RequestParam(required = false, defaultValue = "") String tags,
             RedirectAttributes redirectAttributes) throws IOException {
 
-        PostModel post = postService.updatePost(id, title, text, image, tags);
+        postService.updatePost(id, title, text, image, tags);
         redirectAttributes.addFlashAttribute("message", "Post updated successfully");
-        return "redirect:/posts/" + post.getId();
+        return "redirect:/posts/" + id;
     }
 
     @PostMapping("/posts/{id}/comments")

@@ -1,17 +1,18 @@
 package ru.yandex.practicum.util;
 
+import lombok.Data;
+
+@Data
 public class Paging {
-    private final int pageNumber;
-    private final int pageSize;
-    private final int totalPages;
-    private final boolean hasNext;
-    private final boolean hasPrevious;
+    private int pageNumber;
+    private int pageSize;
+    private boolean hasNext;
+    private boolean hasPrevious;
 
     // Constructor, getters y otros métodos...
-    public Paging(int pageNumber, int pageSize, int totalPages, boolean hasNext, boolean hasPrevious) {
+    public Paging(int pageNumber, int pageSize, boolean hasNext, boolean hasPrevious) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
-        this.totalPages = totalPages;
         this.hasNext = hasNext;
         this.hasPrevious = hasPrevious;
     }

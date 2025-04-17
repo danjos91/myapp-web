@@ -2,6 +2,7 @@ package ru.yandex.practicum.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -35,6 +36,11 @@ public class JdbcNativePostRepository implements PostRepository {
     }
 
     @Override
+    public Optional<PostModel> findById() {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<PostModel> findById(long id) {
         String sql = "SELECT * FROM posts WHERE id = ?";
 
@@ -56,7 +62,6 @@ public class JdbcNativePostRepository implements PostRepository {
         }
     }
 
-    @Override
     public void save(PostModel postModel) {
         // Формируем insert-запрос с параметрами
         jdbcTemplate.update("insert into posts(title, text, short_description, image_path, likes) values(?, ?, ?, ?)",
@@ -69,12 +74,54 @@ public class JdbcNativePostRepository implements PostRepository {
         jdbcTemplate.update("delete from posts where id = ?", id);
     }
 
+
     @Override
     public Page<PostModel> findAll(Pageable pageable) {
-        return null;
+
+        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        );
+
+        String countSql = "SELECT COUNT(*) FROM posts";
+
+        List<PostModel> content = jdbcTemplate.query("SELECT * FROM posts", rowMapper);
+        Long total = jdbcTemplate.queryForObject(countSql, Long.class);
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
+    public Page<PostModel> findBySearch(String search, Pageable pageable) {
+
+        String sql = String.format(
+                "SELECT * FROM posts WHERE LOWER(title) LIKE LOWER(?) OR LOWER(content) LIKE LOWER(?) LIMIT %d",
+                pageable.getPageSize()
+        );
+
+        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        );
+
+        String countSql = "SELECT COUNT(*) FROM posts WHERE LOWER(title) LIKE LOWER(?) OR LOWER(content) LIKE LOWER(?)";
+
+        String searchTerm = "%" + search + "%";
+        List<PostModel> content = jdbcTemplate.query(sql, rowMapper, searchTerm, searchTerm);
+        Long total = jdbcTemplate.queryForObject(countSql, Long.class, searchTerm, searchTerm);
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+
     public Page<PostModel> findByTagsContaining(String tag, Pageable pageable) {
         return null;
     }

@@ -17,8 +17,6 @@ public class JdbcNativeUserRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        // Выполняем запрос с помощью JdbcTemplate
-        // Преобразовываем ответ с помощью RowMapper
         return jdbcTemplate.query(
                 "select id, first_name, last_name, age, active from users",
                 (rs, rowNum) -> new User(
@@ -32,7 +30,6 @@ public class JdbcNativeUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
-        // Формируем insert-запрос с параметрами
         jdbcTemplate.update("insert into users(first_name, last_name, age, active) values(?, ?, ?, ?)",
                 user.getFirstName(), user.getLastName(), user.getAge(), user.isActive());
     }

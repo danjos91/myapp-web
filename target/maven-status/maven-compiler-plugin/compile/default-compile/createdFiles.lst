@@ -1,3 +1,4 @@
+ru\yandex\practicum\util\Paging.class
 ru\yandex\practicum\controller\HomeController.class
 ru\yandex\practicum\service\PostService.class
 ru\yandex\practicum\service\UserService.class
