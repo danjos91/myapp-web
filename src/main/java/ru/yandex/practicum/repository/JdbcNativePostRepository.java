@@ -64,8 +64,15 @@ public class JdbcNativePostRepository implements PostRepository {
 
     public void save(PostModel postModel) {
         // Формируем insert-запрос с параметрами
-        jdbcTemplate.update("insert into posts(title, text, short_description, image_path, likes) values(?, ?, ?, ?)",
-                postModel.getTitle(), postModel.getText(), postModel, postModel.getShortDescription(), postModel.getImagePath(), postModel.getLikes());
+        // Fix the parameter mismatch
+        jdbcTemplate.update(
+                "insert into posts(title, text, short_description, image_path, likes) values(?, ?, ?, ?, ?)",
+                postModel.getTitle(),
+                postModel.getText(),
+                postModel.getShortDescription(),
+                postModel.getImagePath(),
+                postModel.getLikes()
+        );
     }
 
 
