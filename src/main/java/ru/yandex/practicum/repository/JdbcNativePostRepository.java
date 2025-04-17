@@ -1,14 +1,16 @@
 package ru.yandex.practicum.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.model.PostModel;
-import ru.yandex.practicum.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class JdbcNativePostRepository implements UserRepository {
+public class JdbcNativePostRepository implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -17,30 +19,52 @@ public class JdbcNativePostRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
-        // Выполняем запрос с помощью JdbcTemplate
-        // Преобразовываем ответ с помощью RowMapper
-        return jdbcTemplate.query(
-                "select id, title from users",
-                (rs, rowNum) -> new PostModel(
-                        rs.getLong("id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getInt("age"),
-                        rs.getBoolean("active")
-                ));
+    public List<PostModel> findAll() {
+        String sql = "SELECT * FROM posts";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        ));
     }
 
     @Override
-    public void save(User user) {
-        // Формируем insert-запрос с параметрами
-        jdbcTemplate.update("insert into users(first_name, last_name, age, active) values(?, ?, ?, ?)",
-                user.getFirstName(), user.getLastName(), user.getAge(), user.isActive());
+    public Optional<PostModel> findById(long id) {
+        String sql = "SELECT * FROM posts WHERE id = ?";
+
+        // Definir RowMapper como variable separada
+        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        );
+
+        try {
+            PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return Optional.ofNullable(post);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
+
+    @Override
+    public void save(PostModel postModel) {
+        // Формируем insert-запрос с параметрами
+        jdbcTemplate.update("insert into posts(title, text, short_description, image_path, likes) values(?, ?, ?, ?)",
+                postModel.getTitle(), postModel.getText(), postModel, postModel.getShortDescription(), postModel.getImagePath(), postModel.getLikes());
+    }
+
 
     @Override
     public void deleteById(Long id) {
-        jdbcTemplate.update("delete from users where id = ?", id);
+        jdbcTemplate.update("delete from posts where id = ?", id);
     }
 
 }
