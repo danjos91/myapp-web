@@ -1,5 +1,6 @@
 #directories
 target
+.idea
 
 # Compiled class file
 *.class
