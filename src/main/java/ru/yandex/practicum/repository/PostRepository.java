@@ -15,11 +15,11 @@ public interface PostRepository {
 
     List<PostModel> findAll();
 
-    Optional<PostModel> findById();
-
     Optional<PostModel> findById(long id);
 
-    void save(PostModel postModel);
+    PostModel save(PostModel postModel);
+
+    void update(PostModel postModel);
 
     void deleteById(Long id);
 }

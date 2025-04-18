@@ -36,11 +36,6 @@ public class JdbcNativePostRepository implements PostRepository {
     }
 
     @Override
-    public Optional<PostModel> findById() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<PostModel> findById(long id) {
         String sql = "SELECT * FROM posts WHERE id = ?";
 
@@ -62,7 +57,49 @@ public class JdbcNativePostRepository implements PostRepository {
         }
     }
 
-    public void save(PostModel postModel) {
+    public Optional<PostModel> findByIdWithComments(long id) {
+        String sql = "SELECT * FROM posts WHERE id = ?";
+
+        // Definir RowMapper como variable separada
+        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        );
+
+        try {
+            PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return Optional.ofNullable(post);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<PostModel> findByTitle(String title) {
+        String sql = "SELECT * FROM posts WHERE title = ?";
+
+        // Definir RowMapper como variable separada
+        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
+                rs.getLong("id"),
+                rs.getString("title"),
+                rs.getString("text"),
+                rs.getString("short_description"),
+                rs.getString("image_path"),
+                rs.getLong("likes")
+        );
+
+        try {
+            PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, title);
+            return Optional.ofNullable(post);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public PostModel save(PostModel postModel) {
         // Формируем insert-запрос с параметрами
         // Fix the parameter mismatch
         jdbcTemplate.update(
@@ -73,8 +110,23 @@ public class JdbcNativePostRepository implements PostRepository {
                 postModel.getImagePath(),
                 postModel.getLikes()
         );
+
+        PostModel postModelwithId = findByTitle(postModel.getTitle()).get();
+        return postModelwithId;
     }
 
+    @Override
+    public void update(PostModel postModel) {
+        jdbcTemplate.update(
+                "UPDATE posts SET title = ?, text = ?, short_description = ?, image_path = ?, likes = ? WHERE id = ?",
+                postModel.getTitle(),
+                postModel.getText(),
+                postModel.getShortDescription(),
+                postModel.getImagePath(),
+                postModel.getLikes(),
+                postModel.getId()
+        );
+    }
 
     @Override
     public void deleteById(Long id) {

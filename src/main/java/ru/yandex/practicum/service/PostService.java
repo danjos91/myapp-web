@@ -60,8 +60,7 @@ public class PostService {
             post.setImagePath(imagePath);
         }
 
-        postRepository.save(post);
-        return post;
+        return postRepository.save(post);
     }
 
     public byte[] getPostImage(Long id) {
@@ -81,7 +80,7 @@ public class PostService {
     public void likePost(Long id, boolean like) {
         PostModel post = getPostById(id);
         post.setLikes(like ? post.getLikes() + 1 : post.getLikes() - 1);
-        postRepository.save(post);
+        postRepository.update(post);
     }
 
     public void updatePost(Long id, String title, String text, MultipartFile image, String tags) throws IOException {
@@ -102,13 +101,7 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void addComment(Long id, String text) {
-        PostModel post = getPostById(id);
-        Comment comment = new Comment();
-        comment.setText(text);
-        post.getComments().add(comment);
-        postRepository.save(post);
-    }
+
 
     public void editComment(Long id, Long commentId, String text) {
         PostModel post = getPostById(id);
@@ -119,12 +112,6 @@ public class PostService {
             comment.get().setText(text);
             postRepository.save(post);
         }
-    }
-
-    public void deleteComment(Long id, Long commentId) {
-        PostModel post = getPostById(id);
-        post.getComments().removeIf(c -> c.getId().equals(commentId));
-        postRepository.save(post);
     }
 
     public void deletePost(Long id) {
@@ -153,4 +140,5 @@ public class PostService {
         }
         return List.of(tags.split(",\\s*"));
     }
+
 }

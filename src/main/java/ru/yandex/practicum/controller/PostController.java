@@ -5,20 +5,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.yandex.practicum.model.Comment;
 import ru.yandex.practicum.model.PostModel;
+import ru.yandex.practicum.service.CommentService;
 import ru.yandex.practicum.service.PostService;
 import ru.yandex.practicum.util.Paging;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -40,6 +45,8 @@ public class PostController {
     @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
         PostModel post = postService.getPostById(id);
+        List<Comment> comments = commentService.getCommentsByPostId(id);
+        post.setComments(comments);
         model.addAttribute("post", post);
         return "post";
     }
@@ -100,7 +107,7 @@ public class PostController {
             @PathVariable Long id,
             @RequestParam String text) {
 
-        postService.addComment(id, text);
+        commentService.addComment(id, text);
         return "redirect:/posts/" + id;
     }
 
@@ -110,7 +117,7 @@ public class PostController {
             @PathVariable Long commentId,
             @RequestParam String text) {
 
-        postService.editComment(id, commentId, text);
+        commentService.editComment(commentId, text);
         return "redirect:/posts/" + id;
     }
 
@@ -119,7 +126,7 @@ public class PostController {
             @PathVariable Long id,
             @PathVariable Long commentId) {
 
-        postService.deleteComment(id, commentId);
+        commentService.deleteComment(commentId);
         return "redirect:/posts/" + id;
     }
 

@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS tags (
                                     text TEXT NOT NULL,
                                     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
-INSERT INTO comments(post_id, text) VALUES (1,'vacation');
-INSERT INTO comments(post_id, text) VALUES (1,'interesting');
-INSERT INTO comments(post_id, text) VALUES (1,'special');
-INSERT INTO comments(post_id, text) VALUES (1,'fun');
-INSERT INTO comments(post_id, text) VALUES (2,'interesting');
-INSERT INTO comments(post_id, text) VALUES (3,'interesting');
-INSERT INTO comments(post_id, text) VALUES (3,'special');
-INSERT INTO comments(post_id, text) VALUES (3,'fun');
+INSERT INTO tags(post_id, text) VALUES (1,'vacation');
+INSERT INTO tags(post_id, text) VALUES (1,'interesting');
+INSERT INTO tags(post_id, text) VALUES (1,'special');
+INSERT INTO tags(post_id, text) VALUES (1,'fun');
+INSERT INTO tags(post_id, text) VALUES (2,'interesting');
+INSERT INTO tags(post_id, text) VALUES (3,'interesting');
+INSERT INTO tags(post_id, text) VALUES (3,'special');
+INSERT INTO tags(post_id, text) VALUES (3,'fun');
 
 -- Таблица с пользователями
 create table if not exists users(

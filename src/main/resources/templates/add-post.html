@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Витрина товаров</title>
 </head>
-
 <body>
 
 <form method="GET" th:action="@{/posts}">
-    <button style="float:right;">НА ГЛАВНУЮ &cudarrr;</button>
+    <button type="submit" style="float:right;">НА ГЛАВНУЮ &cudarrr;</button>
 </form>
 
 <form method="POST"
-      th:action="${post.getId() == null ? @{'/posts'} : @{'/posts/' + post.getId()}}"
+      th:action="${post.getId() == null ? '/myapp_web_war/posts' : '/myapp_web_war/posts/' + post.getId()}"
       enctype="multipart/form-data">
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
@@ -41,9 +39,10 @@
         </tr>
         <tr>
             <td>
-                <button style="float:right;" th:text="${post == null ? 'Сохранить' : 'Редактировать'}"></button>
+                <button style="float:right;" th:text="${post.getId() == null ? 'Сохранить' : 'Редактировать'}"></button>
             </td>
         </tr>
     </table>
 </form>
 </body>
+</html>
