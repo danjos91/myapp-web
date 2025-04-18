@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.service.PostService;
 import ru.yandex.practicum.util.Paging;
@@ -55,12 +54,10 @@ public class PostController {
     public String addPost(
             @RequestParam String title,
             @RequestParam String text,
-            @RequestParam MultipartFile image,
-            @RequestParam(required = false, defaultValue = "") String tags,
-            RedirectAttributes redirectAttributes) throws IOException {
+            @RequestParam String tags,
+            @RequestParam MultipartFile image) throws IOException {
 
         PostModel post = postService.createPost(title, text, image, tags);
-        redirectAttributes.addFlashAttribute("message", "Post created successfully");
         return "redirect:/posts/" + post.getId();
     }
 
@@ -73,11 +70,9 @@ public class PostController {
     @PostMapping("/{id}/like")
     public String likePost(
             @PathVariable Long id,
-            @RequestParam boolean like,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam boolean like) {
 
         postService.likePost(id, like);
-        redirectAttributes.addFlashAttribute("message", like ? "Post liked" : "Post unliked");
         return "redirect:/posts/" + id;
     }
 
@@ -94,22 +89,18 @@ public class PostController {
             @RequestParam String title,
             @RequestParam String text,
             @RequestParam(required = false) MultipartFile image,
-            @RequestParam(required = false, defaultValue = "") String tags,
-            RedirectAttributes redirectAttributes) throws IOException {
+            @RequestParam(required = false, defaultValue = "") String tags) throws IOException {
 
         postService.updatePost(id, title, text, image, tags);
-        redirectAttributes.addFlashAttribute("message", "Post updated successfully");
         return "redirect:/posts/" + id;
     }
 
     @PostMapping("/{id}/comments")
     public String addComment(
             @PathVariable Long id,
-            @RequestParam String text,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam String text) {
 
         postService.addComment(id, text);
-        redirectAttributes.addFlashAttribute("message", "Comment added");
         return "redirect:/posts/" + id;
     }
 
@@ -117,32 +108,26 @@ public class PostController {
     public String editComment(
             @PathVariable Long id,
             @PathVariable Long commentId,
-            @RequestParam String text,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam String text) {
 
         postService.editComment(id, commentId, text);
-        redirectAttributes.addFlashAttribute("message", "Comment updated");
         return "redirect:/posts/" + id;
     }
 
     @PostMapping("/{id}/comments/{commentId}/delete")
     public String deleteComment(
             @PathVariable Long id,
-            @PathVariable Long commentId,
-            RedirectAttributes redirectAttributes) {
+            @PathVariable Long commentId) {
 
         postService.deleteComment(id, commentId);
-        redirectAttributes.addFlashAttribute("message", "Comment deleted");
         return "redirect:/posts/" + id;
     }
 
     @PostMapping("/{id}/delete")
     public String deletePost(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
+            @PathVariable Long id) {
 
         postService.deletePost(id);
-        redirectAttributes.addFlashAttribute("message", "Post deleted");
         return "redirect:/posts";
     }
 }
