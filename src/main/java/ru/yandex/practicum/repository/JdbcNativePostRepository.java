@@ -6,8 +6,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.model.PostModel;
 
@@ -21,21 +19,6 @@ public class JdbcNativePostRepository implements PostRepository {
 
     public JdbcNativePostRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Override
-    public List<PostModel> findAll() {
-        String sql = "SELECT * FROM posts";
-
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new PostModel(
-                rs.getLong("id"),
-                rs.getString("title"),
-                rs.getString("text"),
-                rs.getString("short_description"),
-                rs.getString("image_path"),
-                rs.getString("tags"),
-                rs.getLong("likes")
-        ));
     }
 
     @Override
@@ -54,27 +37,6 @@ public class JdbcNativePostRepository implements PostRepository {
 
         try {
             PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, id);
-            return Optional.ofNullable(post);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    public Optional<PostModel> findByTitle(String title) {
-        String sql = "SELECT * FROM posts WHERE title = ?";
-
-        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
-                rs.getLong("id"),
-                rs.getString("title"),
-                rs.getString("text"),
-                rs.getString("short_description"),
-                rs.getString("image_path"),
-                rs.getString("tags"),
-                rs.getLong("likes")
-        );
-
-        try {
-            PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, title);
             return Optional.ofNullable(post);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -159,11 +121,6 @@ public class JdbcNativePostRepository implements PostRepository {
         Long total = jdbcTemplate.queryForObject(countSql, Long.class, searchTerm, searchTerm);
 
         return new PageImpl<>(content, pageable, total);
-    }
-
-
-    public Page<PostModel> findByTagsContaining(String tag, Pageable pageable) {
-        return null;
     }
 
 }

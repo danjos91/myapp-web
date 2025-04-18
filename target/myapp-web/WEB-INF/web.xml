@@ -32,6 +32,6 @@
   <!-- DispatcherServlet обрабатывает все запросы -->
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/</url-pattern>
+    <url-pattern>/posts</url-pattern>
   </servlet-mapping>
 </web-app>

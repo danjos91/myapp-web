@@ -13,8 +13,6 @@ public interface PostRepository {
 
     Page<PostModel> findBySearch(String search, Pageable pageable);
 
-    List<PostModel> findAll();
-
     Optional<PostModel> findById(long id);
 
     void save(PostModel postModel);

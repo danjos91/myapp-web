@@ -3,7 +3,6 @@ package ru.yandex.practicum.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.model.Comment;
-import ru.yandex.practicum.model.User;
 
 import java.util.Collections;
 import java.util.List;
