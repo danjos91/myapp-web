@@ -8,11 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.service.PostService;
+import ru.yandex.practicum.util.Paging;
 
 import java.io.IOException;
-import java.util.Map;
 
-@Controller("/posts")
+@Controller
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
@@ -23,21 +24,16 @@ public class PostController {
 
     @GetMapping
     public String getPosts(
-            @RequestParam(required = false, defaultValue = "") String search,
-            @RequestParam(required = false, defaultValue = "10") int pageSize,
-            @RequestParam(required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(name = "search", required = false, defaultValue = "") String search,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "5") int pageSize,
+            @RequestParam(name = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             Model model) {
 
         Page<PostModel> postPage = postService.getPosts(search, pageNumber, pageSize);
-
+        Paging paging = new Paging(pageNumber, pageSize, postPage.hasNext(), postPage.hasPrevious());
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("search", search);
-        model.addAttribute("paging", Map.of(
-                "pageNumber", pageNumber,
-                "pageSize", pageSize,
-                "hasNext", postPage.hasNext(),
-                "hasPrevious", postPage.hasPrevious()
-        ));
+        model.addAttribute("paging", paging);
 
         return "posts";
     }

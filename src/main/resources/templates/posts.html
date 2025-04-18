@@ -6,13 +6,13 @@
 </head>
 
 <body>
-    <form method="GET" action="/posts/add">
+    <form method="GET" th:action="@{/posts/add}">
         <button style="float:right;">ДОБАВИТЬ ПОСТ</button>
     </form>
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
-                <form>
+                <form method="GET" action="/posts">
                     <p>
                         <label for="search">Найти по тегу: </label>
                         <input id="search" style="width:300px;" name="search" th:value="${search}">
@@ -21,7 +21,9 @@
                     <p>
                         <label for="pageSize">Число постов: </label>
                         <select id="pageSize" name="pageSize" onchange="this.form.submit()">
-                            <option value="5" th:selected="${paging.pageSize() == 5}">5</option>
+<!--                            <option value="5" th:selected="${paging.pageSize() == 5}">5</option>-->
+                            <option value="5" th:selected="${paging.pageSize == 5}">5</option>
+                            <!-- Change all other th:selected to use property access -->
                             <option value="10" th:selected="${paging.pageSize() == 10}">10</option>
                             <option value="20" th:selected="${paging.pageSize() == 20}">20</option>
                             <option value="50" th:selected="${paging.pageSize() == 50}">50</option>
