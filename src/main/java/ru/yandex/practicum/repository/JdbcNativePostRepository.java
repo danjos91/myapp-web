@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.model.PostModel;
 
@@ -31,6 +33,7 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getString("text"),
                 rs.getString("short_description"),
                 rs.getString("image_path"),
+                rs.getString("tags"),
                 rs.getLong("likes")
         ));
     }
@@ -39,34 +42,13 @@ public class JdbcNativePostRepository implements PostRepository {
     public Optional<PostModel> findById(long id) {
         String sql = "SELECT * FROM posts WHERE id = ?";
 
-        // Definir RowMapper como variable separada
         RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
                 rs.getLong("id"),
                 rs.getString("title"),
                 rs.getString("text"),
                 rs.getString("short_description"),
                 rs.getString("image_path"),
-                rs.getLong("likes")
-        );
-
-        try {
-            PostModel post = jdbcTemplate.queryForObject(sql, rowMapper, id);
-            return Optional.ofNullable(post);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    public Optional<PostModel> findByIdWithComments(long id) {
-        String sql = "SELECT * FROM posts WHERE id = ?";
-
-        // Definir RowMapper como variable separada
-        RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
-                rs.getLong("id"),
-                rs.getString("title"),
-                rs.getString("text"),
-                rs.getString("short_description"),
-                rs.getString("image_path"),
+                rs.getString("tags"),
                 rs.getLong("likes")
         );
 
@@ -81,13 +63,13 @@ public class JdbcNativePostRepository implements PostRepository {
     public Optional<PostModel> findByTitle(String title) {
         String sql = "SELECT * FROM posts WHERE title = ?";
 
-        // Definir RowMapper como variable separada
         RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
                 rs.getLong("id"),
                 rs.getString("title"),
                 rs.getString("text"),
                 rs.getString("short_description"),
                 rs.getString("image_path"),
+                rs.getString("tags"),
                 rs.getLong("likes")
         );
 
@@ -99,30 +81,27 @@ public class JdbcNativePostRepository implements PostRepository {
         }
     }
 
-    public PostModel save(PostModel postModel) {
-        // Формируем insert-запрос с параметрами
-        // Fix the parameter mismatch
+    public void  save(PostModel postModel) {
         jdbcTemplate.update(
-                "insert into posts(title, text, short_description, image_path, likes) values(?, ?, ?, ?, ?)",
+                "insert into posts(title, text, short_description, image_path, tags, likes) values(?, ?, ?, ?, ?, ?)",
                 postModel.getTitle(),
                 postModel.getText(),
                 postModel.getShortDescription(),
                 postModel.getImagePath(),
+                postModel.getTags(),
                 postModel.getLikes()
         );
-
-        PostModel postModelwithId = findByTitle(postModel.getTitle()).get();
-        return postModelwithId;
     }
 
     @Override
     public void update(PostModel postModel) {
         jdbcTemplate.update(
-                "UPDATE posts SET title = ?, text = ?, short_description = ?, image_path = ?, likes = ? WHERE id = ?",
+                "UPDATE posts SET title = ?, text = ?, short_description = ?, image_path = ?, tags = ?, likes = ? WHERE id = ?",
                 postModel.getTitle(),
                 postModel.getText(),
                 postModel.getShortDescription(),
                 postModel.getImagePath(),
+                postModel.getTags(),
                 postModel.getLikes(),
                 postModel.getId()
         );
@@ -143,6 +122,7 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getString("text"),
                 rs.getString("short_description"),
                 rs.getString("image_path"),
+                rs.getString("tags"),
                 rs.getLong("likes")
         );
 
@@ -168,6 +148,7 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getString("text"),
                 rs.getString("short_description"),
                 rs.getString("image_path"),
+                rs.getString("tags"),
                 rs.getLong("likes")
         );
 

@@ -7,17 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.exception.StorageException;
-import ru.yandex.practicum.model.Comment;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.repository.PostRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,11 +45,11 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException("Post not found with id: " + id));
     }
 
-    public PostModel createPost(String title, String text, MultipartFile image, String tags) throws IOException {
+    public void createPost(String title, String text, MultipartFile image, String tags) throws IOException {
         PostModel post = new PostModel();
         post.setTitle(title);
         post.setText(text);
-        post.setTags(parseTags(tags));
+        post.setTags(tags);
         post.setLikes(0);
         post.setComments(new ArrayList<>());
 
@@ -60,7 +58,7 @@ public class PostService {
             post.setImagePath(imagePath);
         }
 
-        return postRepository.save(post);
+        postRepository.save(post);
     }
 
     public byte[] getPostImage(Long id) {
@@ -70,11 +68,20 @@ public class PostService {
         }
         Path path = Paths.get(post.getImagePath());
         try {
-            return   Files.readAllBytes(path);
+            if (post.getImagePath().equals("none")) {
+                InputStream inputStream = getClass().getClassLoader()
+                        .getResourceAsStream("/images/vacations.jpg");
+                if (inputStream == null) {
+                    throw new NotFoundException("Image not found");
+                }
+                return inputStream.readAllBytes();
+            } else {
+                byte[] bytes = Files.readAllBytes(path);
+                return  bytes;
+            }
         } catch (Exception e) {
             throw new StorageException("Error reading bytes", e);
         }
-
     }
 
     public void likePost(Long id, boolean like) {
@@ -87,7 +94,7 @@ public class PostService {
         PostModel post = getPostById(id);
         post.setTitle(title);
         post.setText(text);
-        post.setTags(parseTags(tags));
+        post.setTags(tags);
 
         if (image != null && !image.isEmpty()) {
             // Delete old image if exists
@@ -98,21 +105,9 @@ public class PostService {
             post.setImagePath(imagePath);
         }
 
-        postRepository.save(post);
+        postRepository.update(post);
     }
 
-
-
-    public void editComment(Long id, Long commentId, String text) {
-        PostModel post = getPostById(id);
-        Optional<Comment> comment = post.getComments().stream()
-                .filter(c -> c.getId().equals(commentId))
-                .findFirst();
-        if (comment.isPresent()) {
-            comment.get().setText(text);
-            postRepository.save(post);
-        }
-    }
 
     public void deletePost(Long id) {
         PostModel post = getPostById(id);
@@ -132,13 +127,6 @@ public class PostService {
         Path path = Paths.get(uploadDir + filename);
         Files.copy(image.getInputStream(), path);
         return path.toString();
-    }
-
-    private List<String> parseTags(String tags) {
-        if (tags == null || tags.trim().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return List.of(tags.split(",\\s*"));
     }
 
 }

@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -14,29 +15,24 @@ public class PostModel {
     private String imagePath; // relative path TODO add logic to work with images
     private long likes = 0;
     private List<Comment> comments = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
+    private String tags = "";
 
-    public PostModel(Long id, String title, String text, String shortDescription, String imagePath, long likes) {
+    public PostModel(Long id, String title, String text, String shortDescription, String imagePath, String tags, long likes) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.shortDescription = shortDescription;
         this.imagePath = imagePath;
+        this.tags = tags;
         this.likes = likes;
     }
 
     public PostModel() {
     }
 
-    public String getTagsAsText() {
-        String tagsAsStr = "";
-        if (!tags.isEmpty()) {
-            for (String tag : tags) {
-                tagsAsStr = tag + ", ";
-            }
-        }
-
-        return tagsAsStr;
+    public List<String> getTagsAsList() {
+        return Arrays.stream(tags.split(",")).toList();
     }
+
 }
 

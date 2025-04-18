@@ -64,8 +64,8 @@ public class PostController {
             @RequestParam String tags,
             @RequestParam MultipartFile image) throws IOException {
 
-        PostModel post = postService.createPost(title, text, image, tags);
-        return "redirect:/posts/" + post.getId();
+        postService.createPost(title, text, image, tags);
+        return "redirect:/posts";
     }
 
     @GetMapping("/images/{id}")

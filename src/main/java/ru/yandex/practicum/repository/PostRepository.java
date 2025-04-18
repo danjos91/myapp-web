@@ -17,7 +17,7 @@ public interface PostRepository {
 
     Optional<PostModel> findById(long id);
 
-    PostModel save(PostModel postModel);
+    void save(PostModel postModel);
 
     void update(PostModel postModel);
 
