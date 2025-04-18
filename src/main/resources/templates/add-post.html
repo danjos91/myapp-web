@@ -28,13 +28,13 @@
         <tr>
             <td>
                 <h3>Теги</h3>
-                <textarea rows="2" style="width: 100%;" name="tags" th:text="${post == null ? '' : post.getTags()}"></textarea>
+                <textarea rows="2"  style="width: 100%;" name="tags" th:text="${post == null ? '' : post.getTags()}"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 <h3>Текст</h3>
-                <textarea rows="30" style="width: 100%;" name="text" th:text="${post == null ? '' : post.getText()}"></textarea>
+                <textarea rows="30" style="width: 100%; white-space: pre-wrap;" name="text" th:text="${post == null ? '' : post.getText()}"></textarea>
             </td>
         </tr>
         <tr>
