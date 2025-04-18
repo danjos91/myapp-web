@@ -34,6 +34,10 @@ public class PostController {
             Model model) {
 
         Page<PostModel> postPage = postService.getPosts(search, pageNumber, pageSize);
+        for(PostModel pm : postPage.getContent()) {
+            List<Comment> comments = commentService.getCommentsByPostId(pm.getId());
+            pm.setComments(comments);
+        }
         Paging paging = new Paging(pageNumber, pageSize, postPage.hasNext(), postPage.hasPrevious());
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("search", search);

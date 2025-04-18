@@ -34,5 +34,16 @@ public class PostModel {
         return Arrays.stream(tags.split(",")).toList();
     }
 
+    public String getTextPreview() {
+        String[] textSplited = text.split(" ");
+        StringBuilder textPreview = new StringBuilder();
+        int limit = Math.min(textSplited.length, 10);
+        for (int i=0; i< limit; i++) {
+            textPreview.append(textSplited[i]).append(" ");
+        }
+        textPreview.append("...");
+        return textPreview.toString();
+    }
+
 }
 

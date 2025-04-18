@@ -36,7 +36,7 @@ public class PostService {
     public Page<PostModel> getPosts(String search, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return (search != null && !search.trim().isEmpty())
-                ? postRepository.findBySearch(search, pageable)
+                ? postRepository.findBySearch(search.toLowerCase(), pageable)
                 : postRepository.findAll(pageable);
     }
 
@@ -68,16 +68,23 @@ public class PostService {
         }
         Path path = Paths.get(post.getImagePath());
         try {
-            if (post.getImagePath().equals("none")) {
-                InputStream inputStream = getClass().getClassLoader()
-                        .getResourceAsStream("/images/vacations.jpg");
-                if (inputStream == null) {
-                    throw new NotFoundException("Image not found");
-                }
-                return inputStream.readAllBytes();
+            String localPath = "";
+            if (post.getImagePath().equals("none1")) {
+                localPath = "/images/vacations.jpg";
+            } else if (post.getImagePath().equals("none2")) {
+                localPath = "/images/animals.jpg";
+            } else if (post.getImagePath().equals("none3")) {
+                localPath = "/images/hobbies.jpg";
             } else {
                 byte[] bytes = Files.readAllBytes(path);
                 return  bytes;
+            }
+            try (InputStream inputStream = getClass().getClassLoader()
+                    .getResourceAsStream(localPath)) {
+                if (inputStream == null) {
+                    throw new RuntimeException("File not found: " + localPath);
+                }
+                return inputStream.readAllBytes();
             }
         } catch (Exception e) {
             throw new StorageException("Error reading bytes", e);
