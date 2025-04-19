@@ -1,5 +1,5 @@
 
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS posts CASCADE;
 CREATE TABLE IF NOT EXISTS posts (
                                      id BIGSERIAL PRIMARY KEY,
                                      title VARCHAR(256) NOT NULL,

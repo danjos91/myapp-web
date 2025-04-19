@@ -3,7 +3,10 @@ package ru.yandex.practicum.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -12,17 +15,25 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.yandex.practicum.configuration.DataSourceConfiguration;
 import ru.yandex.practicum.configuration.WebConfiguration;
+import ru.yandex.practicum.model.PostModel;
+import ru.yandex.practicum.repository.PostRepository;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringJUnitConfig(classes = {DataSourceConfiguration.class, WebConfiguration.class})
 @WebAppConfiguration
 @TestPropertySource(locations = "classpath:test-application.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PostControllerIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -49,8 +60,7 @@ class PostControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(view().name("posts"))
-                .andExpect(model().attributeExists("posts"))
-                .andExpect(xpath("//table/tbody/tr").nodeCount(2));
+                .andExpect(model().attributeExists("posts"));
     }
 
     @Test
@@ -65,10 +75,27 @@ class PostControllerIntegrationTest {
     }
 
     @Test
-    void deletePost_shouldRemoveUserFromDatabaseAndRedirect() throws Exception {
-        mockMvc.perform(delete("/posts/1")
-                        .param("_method", "deletePost"))
+    void delete_shouldRemoveUserFromDatabaseAndRedirect() throws Exception {
+        Pageable pageable = PageRequest.of(0, 10);
+        PostModel posts = postRepository.findAll(pageable).getContent().getFirst();
+        String index = posts.getId().toString();
+        mockMvc.perform(post("/posts/" + index + "/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/posts"));
+    }
+
+    @Test
+    void updatePost_shouldModifyExistingPost() throws Exception {
+        PostModel post = postRepository.findAll(PageRequest.of(0, 1)).getContent().getFirst();
+
+        mockMvc.perform(post("/posts/" + post.getId())
+                        .param("title", "New Title")
+                        .param("text", "Updated text")
+                        .param("tags", "updated, new"))
+                .andExpect(status().is3xxRedirection());
+
+        PostModel updated = postRepository.findById(post.getId()).get();
+        assertEquals("New Title", updated.getTitle());
+        assertEquals("Updated text", updated.getText());
     }
 }

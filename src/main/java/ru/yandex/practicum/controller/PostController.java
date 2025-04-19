@@ -66,7 +66,7 @@ public class PostController {
             @RequestParam String title,
             @RequestParam String text,
             @RequestParam String tags,
-            @RequestParam MultipartFile image) throws IOException {
+            @RequestParam (required = false) MultipartFile image) throws IOException {
 
         postService.createPost(title, text, image, tags);
         return "redirect:/posts";
@@ -134,8 +134,9 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
+
     @PostMapping("/{id}/delete")
-    public String deletePost(
+    public String delete(
             @PathVariable Long id) {
 
         postService.deletePost(id);

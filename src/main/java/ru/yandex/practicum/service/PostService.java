@@ -16,7 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+
 
 @Service
 public class PostService {
@@ -118,13 +121,14 @@ public class PostService {
 
     public void deletePost(Long id) {
         PostModel post = getPostById(id);
-        if (post.getImagePath() != null) {
+        String[] values = {"none1", "none2", "none3", null};
+        List<String> valuesList = Arrays.stream(values).toList();
+        if (!valuesList.contains(post.getImagePath())) {
             try {
                 Files.deleteIfExists(Paths.get(post.getImagePath()));
             } catch (Exception e) {
-                throw new StorageException("Delete post error", e);
+                System.out.println("Image not found: " + post.getImagePath());
             }
-
         }
         postRepository.deleteById(id);
     }

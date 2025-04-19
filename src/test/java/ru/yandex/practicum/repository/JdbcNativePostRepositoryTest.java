@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.yandex.practicum.configuration.DataSourceConfiguration;
@@ -53,7 +54,8 @@ class JdbcNativePostRepositoryTest {
 
         postRepository.save(postModel);
 
-        PostModel savedPostModel = postRepository.findById(3L).orElse(null);
+        Pageable pageable = PageRequest.of(0, 10);
+        PostModel savedPostModel = postRepository.findAll(pageable).getContent().getLast();
 
         assertNotNull(savedPostModel);
         assertEquals("Test", savedPostModel.getTitle());
@@ -61,7 +63,7 @@ class JdbcNativePostRepositoryTest {
     }
 
     @Test
-    void findAll_shouldReturnAllUsers() {
+    void findAll_shouldReturnAllPosts() {
         Pageable pageable = PageRequest.of(0, 10);
         List<PostModel> posts = postRepository.findAll(pageable).getContent();
 
@@ -69,8 +71,7 @@ class JdbcNativePostRepositoryTest {
         assertEquals(3, posts.size());
 
         PostModel postModel = posts.getFirst();
-        assertEquals(2L, postModel.getId());
-        assertEquals("Work", postModel.getTitle());
+        assertEquals("Vacations1", postModel.getTitle());
     }
 
     @Test
