@@ -5,7 +5,7 @@
     <title>Пост</title>
     <script>
         function editComment(id) {
-            var comment = document.getElementById("comment" + id);
+            var comment = document.getElementById("comment_" + id);
             var newComment = document.createElement("textarea");
             newComment.innerHTML = comment.innerHTML;
             newComment.rows = 3;
@@ -114,11 +114,7 @@
         <tr th:each="comment : ${post.getComments()}">
             <td style="border-left:thin solid grey;">
                 <form method="POST" th:action="${'/myapp_web_war/posts/' + post.getId() + '/comments/' + comment.getId()}">
-                    <span th:id="${'comment_' + comment.getId()}"
-                          th:text="${comment.getText()}"
-                          onclick="editCommentSpan(this.id)"
-                          style="cursor: pointer; padding: 4px; display: inline-block;">
-                     </span>
+                    <span th:id="${'comment_' + comment.getId()}" th:text="${comment.getText()}" onclick="editCommentSpan(this.id)"></span>
                     <button th:id="${comment.getId()}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
