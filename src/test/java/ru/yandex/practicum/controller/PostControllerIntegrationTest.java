@@ -35,12 +35,12 @@ class PostControllerIntegrationTest {
 
         // Очистка и заполнение тестовых данных в базе
         jdbcTemplate.execute("DELETE FROM posts");
-        jdbcTemplate.execute("INSERT INTO posts(title, text, short_description, image_path, tags, likes)" +
+        jdbcTemplate.execute("INSERT INTO posts(title, text, image_path, tags, likes)" +
                 "VALUES ('Vacations1', 'This is a post about wonderful vacations, when are u going on vacations'," +
-                "'vacations of my dreams', 'none1', 'vacation, fun, rest, отдых, красиво', 0)");
-        jdbcTemplate.execute("INSERT INTO posts(title, text, short_description, image_path, tags, likes)" +
+                "'none1', 'vacation, fun, rest, отдых, красиво', 0)");
+        jdbcTemplate.execute("INSERT INTO posts(title, text, image_path, tags, likes)" +
                 "VALUES ('Work', 'This is a post about my interesting work, what is your work about?'," +
-                "'vacations of my dreams', 'none3', 'work, business', 0)");
+                "'none3', 'work, business', 0)");
     }
 
     @Test
