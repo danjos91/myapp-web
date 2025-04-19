@@ -7,29 +7,43 @@
         function editComment(id) {
             var comment = document.getElementById("comment_" + id);
             var newComment = document.createElement("textarea");
+            var form = comment.closest('form');
+
             newComment.innerHTML = comment.innerHTML;
             newComment.rows = 3;
             newComment.name = "text";
             newComment.style = "width:100%;";
             comment.parentNode.replaceChild(newComment, comment);
+            newComment.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    form.submit();
+                }
+            });
 
             var button = document.getElementById(id);
             button.remove();
 
-            var newButton = document.createElement("button");
-            newButton.innerHTML = "&#10003;";
-            newButton.style="float:right;"
-            newComment.parentNode.appendChild(newButton);
+            var saveButton = document.createElement("button");
+            saveButton.innerHTML = "&#10003;";
+            saveButton.style = "float:right;";
+            textarea.parentNode.appendChild(saveButton);
+            form.appendChild(saveButton);
         }
 
         function editCommentSpan(id) {
-            console.log('THIS ID ', id);
             var comment = document.getElementById(id);
             var textarea = document.createElement("textarea");
+            var form = comment.closest('form');
+
             textarea.value = comment.textContent;
             textarea.rows = 3;
             textarea.name = "text";
             textarea.style = "width:100%;";
+            textarea.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    form.submit();
+                }
+            });
 
             comment.parentNode.replaceChild(textarea, comment);
             var buttonId = id.split("_")[1];
@@ -40,6 +54,7 @@
             saveButton.innerHTML = "&#10003;";
             saveButton.style = "float:right;";
             textarea.parentNode.appendChild(saveButton);
+            form.appendChild(saveButton);
 
             textarea.focus();
         }
