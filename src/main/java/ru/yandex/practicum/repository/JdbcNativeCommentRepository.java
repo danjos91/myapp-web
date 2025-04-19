@@ -34,7 +34,7 @@ public class JdbcNativeCommentRepository implements CommentRepository{
     @Override
     public List<Comment> findByPostId(Long id) {
         if (id == null) {
-            return Collections.emptyList(); // or throw IllegalArgumentException
+            return Collections.emptyList();
         }
         return jdbcTemplate.query(
                 "select * from comments where post_id = ?",

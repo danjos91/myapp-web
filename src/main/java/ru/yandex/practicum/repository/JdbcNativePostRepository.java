@@ -78,7 +78,7 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public Page<PostModel> findAll(Pageable pageable) {
-        // RowMapper remains the same
+
         RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
                 rs.getLong("id"),
                 rs.getString("title"),

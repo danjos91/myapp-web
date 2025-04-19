@@ -12,7 +12,7 @@ public class PostModel {
     private String title = "";
     private String text = "";
     private String shortDescription = "";
-    private String imagePath; // relative path TODO add logic to work with images
+    private String imagePath;
     private long likes = 0;
     private List<Comment> comments = new ArrayList<>();
     private String tags = "";

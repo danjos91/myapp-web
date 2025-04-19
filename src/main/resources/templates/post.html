@@ -22,6 +22,28 @@
             newComment.parentNode.appendChild(newButton);
         }
 
+        function editCommentSpan(id) {
+            console.log('THIS ID ', id);
+            var comment = document.getElementById(id);
+            var textarea = document.createElement("textarea");
+            textarea.value = comment.textContent;
+            textarea.rows = 3;
+            textarea.name = "text";
+            textarea.style = "width:100%;";
+
+            comment.parentNode.replaceChild(textarea, comment);
+            var buttonId = id.split("_")[1];
+            var button = document.getElementById(buttonId);
+            if(button) button.remove();
+
+            var saveButton = document.createElement("button");
+            saveButton.innerHTML = "&#10003;";
+            saveButton.style = "float:right;";
+            textarea.parentNode.appendChild(saveButton);
+
+            textarea.focus();
+        }
+
         function addComment(id) {
             var button = document.getElementById("addCommentButton");
             button.remove();
@@ -92,7 +114,11 @@
         <tr th:each="comment : ${post.getComments()}">
             <td style="border-left:thin solid grey;">
                 <form method="POST" th:action="${'/myapp_web_war/posts/' + post.getId() + '/comments/' + comment.getId()}">
-                    <span th:id="${'comment' + comment.getId()}" th:text="${comment.getText()}"></span>
+                    <span th:id="${'comment_' + comment.getId()}"
+                          th:text="${comment.getText()}"
+                          onclick="editCommentSpan(this.id)"
+                          style="cursor: pointer; padding: 4px; display: inline-block;">
+                     </span>
                     <button th:id="${comment.getId()}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
