@@ -10,7 +10,7 @@
   <packaging>war</packaging>
 
   <name>myapp-web</name>
-  <url>http://localhost:8080/myapp_web</url>
+  <url>http://localhost:8080/myapp-web</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

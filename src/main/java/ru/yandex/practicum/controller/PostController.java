@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/posts")
+@RequestMapping({"/posts", "/"})
 public class PostController {
 
     private final PostService postService;
