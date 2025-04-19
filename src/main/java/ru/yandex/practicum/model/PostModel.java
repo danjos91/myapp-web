@@ -11,17 +11,15 @@ public class PostModel {
     private Long id;
     private String title = "";
     private String text = "";
-    private String shortDescription = "";
     private String imagePath;
     private long likes = 0;
     private List<Comment> comments = new ArrayList<>();
     private String tags = "";
 
-    public PostModel(Long id, String title, String text, String shortDescription, String imagePath, String tags, long likes) {
+    public PostModel(Long id, String title, String text, String imagePath, String tags, long likes) {
         this.id = id;
         this.title = title;
         this.text = text;
-        this.shortDescription = shortDescription;
         this.imagePath = imagePath;
         this.tags = tags;
         this.likes = likes;

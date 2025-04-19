@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.model.Comment;
 import ru.yandex.practicum.model.PostModel;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getLong("id"),
                 rs.getString("title"),
                 rs.getString("text"),
-                rs.getString("short_description"),
                 rs.getString("image_path"),
                 rs.getString("tags"),
                 rs.getLong("likes")
@@ -46,10 +44,9 @@ public class JdbcNativePostRepository implements PostRepository {
 
     public void  save(PostModel postModel) {
         jdbcTemplate.update(
-                "insert into posts(title, text, short_description, image_path, tags, likes) values(?, ?, ?, ?, ?, ?)",
+                "insert into posts(title, text, image_path, tags, likes) values(?, ?, ?, ?, ?)",
                 postModel.getTitle(),
                 postModel.getText(),
-                postModel.getShortDescription(),
                 postModel.getImagePath(),
                 postModel.getTags(),
                 postModel.getLikes()
@@ -59,10 +56,9 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public void update(PostModel postModel) {
         jdbcTemplate.update(
-                "UPDATE posts SET title = ?, text = ?, short_description = ?, image_path = ?, tags = ?, likes = ? WHERE id = ?",
+                "UPDATE posts SET title = ?, text = ?, image_path = ?, tags = ?, likes = ? WHERE id = ?",
                 postModel.getTitle(),
                 postModel.getText(),
-                postModel.getShortDescription(),
                 postModel.getImagePath(),
                 postModel.getTags(),
                 postModel.getLikes(),
@@ -83,7 +79,6 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getLong("id"),
                 rs.getString("title"),
                 rs.getString("text"),
-                rs.getString("short_description"),
                 rs.getString("image_path"),
                 rs.getString("tags"),
                 rs.getLong("likes")
@@ -111,7 +106,6 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getLong("id"),
                 rs.getString("title"),
                 rs.getString("text"),
-                rs.getString("short_description"),
                 rs.getString("image_path"),
                 rs.getString("tags"),
                 rs.getLong("likes")

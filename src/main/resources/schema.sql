@@ -2,102 +2,89 @@ CREATE TABLE IF NOT EXISTS posts (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(256) NOT NULL,
     text TEXT NOT NULL,
-    short_description VARCHAR(256) NOT NULL,
     image_path VARCHAR(512),
     tags TEXT,
     likes INTEGER DEFAULT 0
     );
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Vacations1',
         'This is a post about wonderful vacations, when are u going on vacations',
-        'vacations of my dreams',
         'none1',
         'vacation, fun, rest, отдых, красиво',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Animals2',
         'This is a post about animals, about pets and everything about animals',
-        'animals and pets',
         'none2',
         'work, работа',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Hobbies3',
         'This is a post about wonderful hobbies',
-        'my favorite hobbies',
         'none3',
         'hobby, fun, rest, развлечение',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Vacations4',
         'This is a post about wonderful vacations, when are u going on vacations',
-        'vacations of my dreams',
         'none1',
         'vacation, fun, rest, отдых, красиво',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Animals5',
         'This is a post about animals, about pets and everything about animals',
-        'animals and pets',
         'none2',
         'work, работа',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Hobbies6',
         'This is a post about wonderful hobbies',
-        'my favorite hobbies',
         'none3',
         'hobby, fun, rest, развлечение',
         0);
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Vacations7',
         'This is a post about wonderful vacations, when are u going on vacations',
-        'vacations of my dreams',
         'none1',
         'vacation, fun, rest, отдых, красиво',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Animals8',
         'This is a post about animals, about pets and everything about animals',
-        'animals and pets',
         'none2',
         'work, работа',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Hobbies9',
         'This is a post about wonderful hobbies',
-        'my favorite hobbies',
         'none3',
         'hobby, fun, rest, развлечение',
         0);
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Vacations10',
         'This is a post about wonderful vacations, when are u going on vacations',
-        'vacations of my dreams',
         'none1',
         'vacation, fun, rest, отдых, красиво',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Animals11',
         'This is a post about animals, about pets and everything about animals',
-        'animals and pets',
         'none2',
         'work, работа',
         0);
 
-INSERT INTO posts(title, text, short_description, image_path, tags, likes)
+INSERT INTO posts(title, text, image_path, tags, likes)
 VALUES ('Hobbies12',
         'This is a post about wonderful hobbies',
-        'my favorite hobbies',
         'none3',
         'hobby, fun, rest, развлечение',
         0);
