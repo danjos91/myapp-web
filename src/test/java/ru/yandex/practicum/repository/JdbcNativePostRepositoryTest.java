@@ -31,24 +31,29 @@ class JdbcNativePostRepositoryTest {
         jdbcTemplate.execute("DELETE FROM posts");
 
         // Добавление тестовых данных
-        jdbcTemplate.execute("INSERT INTO posts(title, text, image_path, tags, likes)\n" +
+        jdbcTemplate.execute("INSERT INTO posts (title, text, image_path, tags, likes)\n" +
                 "VALUES ('Vacations1', 'This is a post about wonderful vacations, when are u going on vacations',\n" +
                 "         'none1', 'vacation, fun, rest, отдых, красиво', 0)");
-        jdbcTemplate.execute("INSERT INTO posts(title, text, image_path, tags, likes)\n" +
+        jdbcTemplate.execute("INSERT INTO posts (title, text, image_path, tags, likes)\n" +
                 "VALUES ('Work', 'This is a post about wonderful vacations, when are u going on vacations',\n" +
                 "        'none3', 'vacation, fun, rest, отдых, красиво', 0)");
-        jdbcTemplate.execute("INSERT INTO posts(title, text, image_path, tags, likes)\n" +
+        jdbcTemplate.execute("INSERT INTO posts (title, text, image_path, tags, likes)\n" +
                 "VALUES ('Hobbies', 'This is a post about wonderful vacations, when are u going on vacations',\n" +
                 "        'none3', 'hobby', 0)");
     }
 
     @Test
     void save_shouldAddUserToDatabase() {
-        PostModel postModel = new PostModel(99L, "Test", "this is a test blog, this is an example", "none", "nice, test, random", 10);
+        PostModel postModel = new PostModel();
+        postModel.setTitle("Test");
+        postModel.setText("Text test");
+        postModel.setImagePath("none3");
+        postModel.setTags("nice, test");
+        postModel.setLikes(10);
 
         postRepository.save(postModel);
 
-        PostModel savedPostModel = postRepository.findById(postModel.getId()).orElse(null);
+        PostModel savedPostModel = postRepository.findById(3L).orElse(null);
 
         assertNotNull(savedPostModel);
         assertEquals("Test", savedPostModel.getTitle());
