@@ -100,8 +100,6 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public Page<PostModel> findBySearch(String search, Pageable pageable) {
 
-        String sql = "SELECT *  ";
-
         RowMapper<PostModel> rowMapper = (rs, rowNum) -> new PostModel(
                 rs.getLong("id"),
                 rs.getString("title"),
@@ -111,15 +109,14 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getLong("likes")
         );
 
-        String countSql = "SELECT COUNT(*) FROM posts WHERE tags LIKE '%" + search + "%'";
-        Long total = jdbcTemplate.queryForObject(countSql, Long.class);
+        String countSql = "SELECT COUNT(*) FROM posts WHERE tags LIKE ?";
+        Long total = jdbcTemplate.queryForObject(countSql, Long.class, "%" + search + "%");
 
-        String paginatedSql = "SELECT * FROM posts WHERE tags LIKE '%" + search + "%' " +
-                "ORDER BY id asc " +
-                "LIMIT " + pageable.getPageSize() + " " +
-                "OFFSET " + pageable.getOffset();
+        String paginatedSql = "SELECT * FROM posts WHERE tags LIKE ? " +
+                "ORDER BY id asc LIMIT ? OFFSET ?";
 
-        List<PostModel> content = jdbcTemplate.query(paginatedSql, rowMapper);
+        List<PostModel> content = jdbcTemplate.query(paginatedSql, rowMapper, "%" + search + "%",
+                pageable.getPageSize(), pageable.getOffset());
 
         return new PageImpl<>(content, pageable, total);
     }
