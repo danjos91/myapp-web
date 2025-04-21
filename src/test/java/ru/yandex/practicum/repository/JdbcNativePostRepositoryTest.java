@@ -87,4 +87,15 @@ class JdbcNativePostRepositoryTest {
                 .orElse(null);
         assertNull(deletedPost);
     }
+
+    @Test
+    void findBySearch_shouldPreventSqlInjection() {
+        String maliciousInput = "'; DELETE FROM posts; --";
+
+        Pageable pageable = PageRequest.of(0, 10);
+        postRepository.findBySearch(maliciousInput, pageable);
+        List<PostModel> posts = postRepository.findAll(pageable).getContent();
+
+        assertTrue(posts.size() > 0);
+    }
 }
