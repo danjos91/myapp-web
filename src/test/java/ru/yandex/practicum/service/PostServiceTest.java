@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.PostModel;
@@ -29,6 +30,7 @@ class PostServiceTest {
     private PostService postService;
 
     @Test
+    @Transactional(readOnly = true)
     void getPostById_shouldReturnPostWhenExists() {
         PostModel expected = new PostModel(1L, "Test", "Content", "none", "new, test", 10);
         when(postRepository.findById(1L)).thenReturn(Optional.of(expected));
@@ -39,6 +41,7 @@ class PostServiceTest {
     }
 
     @Test
+    @Transactional(readOnly = true)
     void getPostById_shouldThrowWhenNotExists() {
         when(postRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -46,6 +49,7 @@ class PostServiceTest {
     }
 
     @Test
+    @Transactional
     void deletePost_shouldDeleteWhenImageIsDefault() {
         PostModel post = new PostModel(1L, "Test", "Content", "none", "new, test", 10);
         post.setImagePath("none1");

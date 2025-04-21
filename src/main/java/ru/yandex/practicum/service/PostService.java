@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.exception.StorageException;
@@ -36,6 +37,7 @@ public class PostService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Page<PostModel> getPosts(String search, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return (search != null && !search.trim().isEmpty())
@@ -43,11 +45,13 @@ public class PostService {
                 : postRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
     public PostModel getPostById(Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Post not found with id: " + id));
     }
 
+    @Transactional
     public void createPost(String title, String text, MultipartFile image, String tags) throws IOException {
         PostModel post = new PostModel();
         post.setTitle(title);
@@ -94,12 +98,14 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void likePost(Long id, boolean like) {
         PostModel post = getPostById(id);
         post.setLikes(like ? post.getLikes() + 1 : post.getLikes() - 1);
         postRepository.update(post);
     }
 
+    @Transactional
     public void updatePost(Long id, String title, String text, MultipartFile image, String tags) throws IOException {
         PostModel post = getPostById(id);
         post.setTitle(title);
@@ -118,7 +124,7 @@ public class PostService {
         postRepository.update(post);
     }
 
-
+    @Transactional
     public void deletePost(Long id) {
         PostModel post = getPostById(id);
         String[] values = {"none1", "none2", "none3", null};
