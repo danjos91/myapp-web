@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringJUnitConfig(classes = {DataSourceConfiguration.class, JdbcNativeCommentRepository.class, JdbcNativePostRepository.class})
+
 @TestPropertySource(locations = "classpath:test-application.properties")
 class JdbcNativeCommentRepositoryTest {
 
