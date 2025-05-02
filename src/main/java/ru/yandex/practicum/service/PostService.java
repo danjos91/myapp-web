@@ -77,11 +77,11 @@ public class PostService {
         try {
             String localPath = "";
             if (post.getImagePath().equals("none1")) {
-                localPath = "/images/vacations.jpg";
+                localPath = "images/vacations.jpg";
             } else if (post.getImagePath().equals("none2")) {
-                localPath = "/images/animals.jpg";
+                localPath = "images/animals.jpg";
             } else if (post.getImagePath().equals("none3")) {
-                localPath = "/images/hobbies.jpg";
+                localPath = "images/hobbies.jpg";
             } else {
                 byte[] bytes = Files.readAllBytes(path);
                 return  bytes;
