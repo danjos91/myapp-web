@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig(classes = {DataSourceConfiguration.class, JdbcNativeCommentRepository.class, JdbcNativePostRepository.class})
+
 @TestPropertySource(locations = "classpath:test-application.properties")
 class JdbcNativeCommentRepositoryTest {
 
