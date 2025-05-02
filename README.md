@@ -14,6 +14,7 @@ A simple blog application built with Spring Framework.
 
 - **Backend**:
     - Java 21+
+    - Spring-Boot
     - Spring MVC
     - Spring JDBC
     - Thymeleaf
@@ -22,11 +23,9 @@ A simple blog application built with Spring Framework.
     - H2
 
 ## Getting Started
-    1. Install tomcat.
-    2. run con your console: mvn clean package
-    3. copy the war file into webapps tomcat's folder
+    This web app works with gradle
+    1. local run: ./gradlew clean build bootRun
 
 ## Run test
-    mvn clean test
+    ./gradlew clean build
 
-    Also you can configure your idea in order to run the app.
