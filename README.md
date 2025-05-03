@@ -1,6 +1,6 @@
 # MyApp - Spring Web Application
 
-A simple blog application built with Spring Framework.
+A simple blog application built with Spring Framework. (gradle version)
 
 ## Features
 
