@@ -113,7 +113,6 @@ public class PostService {
         post.setTags(tags);
 
         if (image != null && !image.isEmpty()) {
-            // Delete old image if exists
             if (post.getImagePath() != null) {
                 Files.deleteIfExists(Paths.get(post.getImagePath()));
             }

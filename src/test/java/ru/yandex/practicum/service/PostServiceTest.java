@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.repository.PostRepository;
@@ -21,9 +20,6 @@ class PostServiceTest {
 
     @Mock
     private PostRepository postRepository;
-
-    @Mock
-    private MultipartFile multipartFile;
 
     @InjectMocks
     private PostService postService;

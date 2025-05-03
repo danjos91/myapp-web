@@ -1,45 +1,72 @@
 package ru.yandex.practicum.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.model.PostModel;
 import ru.yandex.practicum.repository.CommentRepository;
+import ru.yandex.practicum.repository.PostRepository;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@Transactional
 class CommentServiceTest {
 
-    @Mock
+    @Autowired
     private CommentRepository commentRepository;
 
-    @InjectMocks
+    @Autowired
     private CommentService commentService;
 
-    @Test
-    @Transactional
-    void addComment_shouldDelegateToRepository() {
-        commentService.addComment(1L, "Test comment");
+    @Autowired
+    private PostRepository postRepository;
 
-        verify(commentRepository).addComment(1L, "Test comment");
+    @BeforeEach
+    void setUp() {
+        PostModel post = new PostModel();
+        post.setTitle("Test Post");
+        post.setText("Test Content");
+        post.setImagePath("none");
+        post.setTags("test");
+        postRepository.save(post);
     }
 
     @Test
-    @Transactional
-    void deleteComment_shouldDelegateToRepository() {
-        commentService.deleteComment(1L);
-
-        verify(commentRepository).deleteComment(1L);
+    void addComment_shouldSaveComment() {
+        Pageable pageable = PageRequest.of(0, 10);
+        PostModel posts = postRepository.findAll(pageable).getContent().getFirst();
+        Long existingPostId = posts.getId();
+        assertDoesNotThrow(() -> {
+            commentService.addComment(existingPostId, "Test comment");
+            assertFalse(commentRepository.findByPostId(existingPostId).isEmpty());
+        });
     }
 
     @Test
-    @Transactional
-    void editComment_shouldDelegateToRepository() {
-        commentService.editComment(1L, "Updated");
+    void deleteComment_shouldRemoveComment() {
+        Pageable pageable = PageRequest.of(0, 10);
+        PostModel posts = postRepository.findAll(pageable).getContent().getFirst();
+        Long existingPostId = posts.getId();
+        commentService.addComment(existingPostId, "To be deleted");
+        Long commentId = commentRepository.findByPostId(existingPostId).getFirst().getId();
+        assertDoesNotThrow(() -> commentService.deleteComment(commentId));
+        assertTrue(commentRepository.findByPostId(existingPostId).isEmpty());
+    }
 
-        verify(commentRepository).updateComment(1L, "Updated");
+    @Test
+    void editComment_shouldUpdateComment() {
+        Pageable pageable = PageRequest.of(0, 10);
+        PostModel posts = postRepository.findAll(pageable).getContent().getFirst();
+        Long existingPostId = posts.getId();
+        commentService.addComment(existingPostId, "To be updated");
+        Long commentId = commentRepository.findByPostId(existingPostId).getFirst().getId();
+        assertDoesNotThrow(() -> commentService.editComment(commentId, "Updated text"));
+        assertEquals("Updated text",
+                commentRepository.findByPostId(existingPostId).getFirst().getText());
     }
 }
